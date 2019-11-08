@@ -59,3 +59,23 @@ describe('most blogs', () => {
     expect(result).toEqual(expected)
   })
 })
+
+describe('most likes', () => {
+  test('of sigle blog is its likes', () => {
+    const result = listHelper.mostLikes([blogs[0]])
+    const expected = {
+      author: "Michael Chan", 
+      likes: 7
+    }
+    expect(result).toEqual(expected)
+  })
+
+  test('are calculated correctly from all likes of same author', () => {
+    const result = listHelper.mostLikes(blogs)
+    const expected = {
+      author: "Edsger W. Dijkstra", 
+      likes: 17
+    }
+    expect(result).toEqual(expected)
+  })
+})
