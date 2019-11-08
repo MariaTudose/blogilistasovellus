@@ -39,3 +39,23 @@ describe('favorite blog', () => {
     expect(result._id).toBe("5a422b3a1b54a676234d17f9")
   })
 })
+
+describe('most blogs', () => {
+  test('returns the single author when there is only one blog', () => {
+    const result = listHelper.mostBlogs([blogs[0]])
+    const expected = {
+      author: "Michael Chan",
+      blogs: 1
+    }
+    expect(result).toEqual(expected)
+  })
+
+  test('returns owner of most blogs and their amount', () => {
+    const result = listHelper.mostBlogs(blogs)
+    const expected = {
+      author: "Robert C. Martin",
+      blogs: 3
+    }
+    expect(result).toEqual(expected)
+  })
+})
