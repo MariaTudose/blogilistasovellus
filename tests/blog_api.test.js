@@ -30,8 +30,31 @@ test('blogs are returned as json', async () => {
 
 test('blogs should have field id', async () => {
   const response = await api.get('/api/blogs')
-  
+
   response.body.forEach(blog => expect(blog.id).toBeDefined())
+})
+
+test('a blog can be added', async () => {
+  const newBlog = {
+    _id: "9a422a851b54a676234d17f7",
+    title: "Test Title",
+    author: "Test Author",
+    url: "https://testing.com/",
+    likes: 999,
+    __v: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  const newBlogs = await api.get('/api/blogs')
+
+  expect(newBlogs.body.length).toBe(blogs.length + 1)
+
+  const titles = newBlogs.body.map(b => b.title)
+  expect(titles).toContain('Test Title')
 })
 
 afterAll(() => {
