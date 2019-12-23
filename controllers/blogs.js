@@ -7,18 +7,13 @@ blogsRouter.get('/', async (_, response) => {
   })
   
 blogsRouter.post('/', async (request, response, next) => {
-  const blog = request.body
+  const blog = new Blog(request.body)
 
-  const newBlog = new Blog({
-    ...blog,
-    likes: blog.likes === undefined ? 0 : blog.likes,
-  })
-
-  try { 
-    const savedBlog = await newBlog.save()
+  try {
+    const savedBlog = await blog.save()
     response.status(201).json(savedBlog)
-  } catch(exception) {
-    next(exception)
+  } catch(e) {
+    next(e)
   }
 })
 

@@ -74,6 +74,19 @@ test('adding a blog without likes sets value to zero', async () => {
   expect(result.body.likes).toBe(0)
 })
 
+test('unable to add blog without title and url', async () => {
+  const newBlog = {
+    _id: "9a422a851b54a676234d17f7",
+    author: "Test Author",
+    __v: 0
+  }
+
+  const result = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
