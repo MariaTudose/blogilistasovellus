@@ -36,12 +36,10 @@ test('blogs should have field id', async () => {
 
 test('a blog can be added', async () => {
   const newBlog = {
-    _id: "9a422a851b54a676234d17f7",
     title: "Test Title",
     author: "Test Author",
     url: "https://testing.com/",
-    likes: 999,
-    __v: 0
+    likes: 999
   }
 
   await api
@@ -59,11 +57,9 @@ test('a blog can be added', async () => {
 
 test('adding a blog without likes sets value to zero', async () => {
   const newBlog = {
-    _id: "9a422a851b54a676234d17f7",
     title: "Test Title 2",
     author: "Test Author",
     url: "https://testing.com/",
-    __v: 0
   }
 
   const result = await api
@@ -76,15 +72,26 @@ test('adding a blog without likes sets value to zero', async () => {
 
 test('unable to add blog without title and url', async () => {
   const newBlog = {
-    _id: "9a422a851b54a676234d17f7",
-    author: "Test Author",
-    __v: 0
+    author: "Test Author"
   }
 
   const result = await api
     .post('/api/blogs')
     .send(newBlog)
     .expect(400)
+})
+
+test('blog deletion works', async () => {
+  const result = await api
+    .delete('/api/blogs/5a422a851b54a676234d17f7')
+    .expect(204)
+
+    const newBlogs = await api.get('/api/blogs')
+
+    expect(newBlogs.body.length).toBe(blogs.length - 1)
+  
+    const titles = newBlogs.body.map(b => b.title)
+    expect(titles).not.toContain('React patterns')
 })
 
 afterAll(() => {
