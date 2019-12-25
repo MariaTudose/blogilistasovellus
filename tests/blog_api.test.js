@@ -82,16 +82,25 @@ test('unable to add blog without title and url', async () => {
 })
 
 test('blog deletion works', async () => {
-  const result = await api
+  await api
     .delete('/api/blogs/5a422a851b54a676234d17f7')
     .expect(204)
 
-    const newBlogs = await api.get('/api/blogs')
+  const newBlogs = await api.get('/api/blogs')
 
-    expect(newBlogs.body.length).toBe(blogs.length - 1)
-  
-    const titles = newBlogs.body.map(b => b.title)
-    expect(titles).not.toContain('React patterns')
+  expect(newBlogs.body.length).toBe(blogs.length - 1)
+
+  const titles = newBlogs.body.map(b => b.title)
+  expect(titles).not.toContain('React patterns')
+})
+
+test('update likes', async () => {
+  const res = await api
+    .put('/api/blogs/5a422a851b54a676234d17f7')
+    .send({likes: 999})
+    .expect(200)
+    
+  expect(res.body.likes).toBe(999)
 })
 
 afterAll(() => {
