@@ -11,6 +11,10 @@ usersRouter.post('/', async (req, res, next) => {
   try {
     const body = req.body
 
+    if(!body.password || body.password.length < 3 ) {
+      return res.status(400).json({ error: 'Password should be longer than 3 characters'})
+    }
+
     const passwordHash = await bcrypt.hash(body.password, 10)
 
     const user = new User({
