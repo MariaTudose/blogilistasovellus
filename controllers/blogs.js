@@ -8,21 +8,11 @@ blogsRouter.get('/', async (_, res) => {
     .find({}).populate('user', { username: 1, name: 1 })
   res.json(blogs)
 })
-
-const getTokenFrom = req => {
-  const auth = req.get('authorization')
-  if(auth && auth.toLowerCase().startsWith('bearer ')) {
-    return auth.substring(7)
-  }
-  return null
-}
   
 blogsRouter.post('/', async (req, res, next) => {
-  const token = getTokenFrom(req)
-
   try {
-    const decodedToken = jwt.verify(token, process.env.SECRET, { algorithms: ['HS256'] })
-    if(!token || !decodedToken.id) {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET, { algorithms: ['HS256'] })
+    if(!req.token || !decodedToken.id) {
       return res.status(401).json({ error: 'token invalid or missing'})
     }
 
